@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#1a56db" />
+  <title>Phlebotomist Consumable Verification</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     LOADING OVERLAY
+     ============================================================ -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-box">
+    <div class="big-spinner"></div>
+    <p id="loadingMsg">Submitting your data…</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     SUCCESS CARD
+     ============================================================ -->
+<div class="success-card" id="successCard">
+  <span class="success-icon">✅</span>
+  <h2>Form Submitted Successfully!</h2>
+  <p>Your consumable verification data has been recorded.</p>
+  <div class="ref-id" id="refIdDisplay"></div>
+  <p style="font-size:0.83rem; color:#6b7280;">Please keep this reference for your records.</p>
+  <br/>
+  <button class="btn-new-entry" onclick="resetForm()">Submit Another Entry</button>
+</div>
+
+<!-- ============================================================
+     MAIN FORM WRAPPER
+     ============================================================ -->
+<div id="formWrapper">
+
+  <!-- Header -->
+  <header class="app-header">
+    <span class="logo-icon">🩸</span>
+    <h1>Phlebotomist Consumable Verification</h1>
+    <p>Maharashtra Health Services · Field Operations</p>
+  </header>
+
+  <!-- Alert messages -->
+  <div class="alert alert-error" id="alertError">
+    <span class="alert-icon">⚠️</span>
+    <span id="alertErrorMsg">Please fix the errors and try again.</span>
+  </div>
+  <div class="alert alert-success" id="alertSuccess">
+    <span class="alert-icon">✅</span>
+    <span id="alertSuccessMsg">Form submitted successfully!</span>
+  </div>
+
+  <form id="mainForm" novalidate>
+
+    <!-- ================================================================
+         SECTION 1 – DISTRICT
+         ================================================================ -->
+    <div class="card">
+      <div class="card-header">
+        <div class="step-badge">1</div>
+        <h2>District Selection</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="districtSelect">District <span class="required-star">*</span></label>
+          <select id="districtSelect" name="district" required>
+            <option value="">— Select District —</option>
+            <option value="AHMADNAGAR">AHMADNAGAR</option>
+            <option value="AKOLA">AKOLA</option>
+            <option value="AMRAVATI">AMRAVATI</option>
+            <option value="BEED">BEED</option>
+            <option value="BHANDARA">BHANDARA</option>
+            <option value="BULDHANA">BULDHANA</option>
+            <option value="CHANDRAPUR">CHANDRAPUR</option>
+            <option value="CHHATRAPATI SAMBHAJINAGAR">CHHATRAPATI SAMBHAJINAGAR</option>
+            <option value="Dharashiv">Dharashiv</option>
+            <option value="DHULE">DHULE</option>
+            <option value="GADCHIROLI">GADCHIROLI</option>
+            <option value="GONDIA">GONDIA</option>
+            <option value="HINGOLI">HINGOLI</option>
+            <option value="JALGAON">JALGAON</option>
+            <option value="JALNA">JALNA</option>
+            <option value="KOLHAPUR">KOLHAPUR</option>
+            <option value="KOLHAPUR-ICHALKARANJI">KOLHAPUR-ICHALKARANJI</option>
+            <option value="LATUR">LATUR</option>
+            <option value="MUMBAI CITY">MUMBAI CITY</option>
+            <option value="NAGPUR">NAGPUR</option>
+            <option value="NANDED">NANDED</option>
+            <option value="NANDURBAR">NANDURBAR</option>
+            <option value="Nashik">Nashik</option>
+            <option value="PALGHAR">PALGHAR</option>
+            <option value="PARBHANI">PARBHANI</option>
+            <option value="PUNE">PUNE</option>
+            <option value="RAIGAD">RAIGAD</option>
+            <option value="RATNAGIRI">RATNAGIRI</option>
+            <option value="SANGLI">SANGLI</option>
+            <option value="SATARA">SATARA</option>
+            <option value="SINDHUDURG">SINDHUDURG</option>
+            <option value="SOLAPUR">SOLAPUR</option>
+            <option value="THANE">THANE</option>
+            <option value="WARDHA">WARDHA</option>
+            <option value="WASHIM">WASHIM</option>
+            <option value="YAVATMAL">YAVATMAL</option>
+          </select>
+          <div class="field-error" id="districtError">Please select a district.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================
+         SECTION 2 – CAMP TYPE
+         ================================================================ -->
+    <div class="card">
+      <div class="card-header">
+        <div class="step-badge">2</div>
+        <h2>Camp Type</h2>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label>Select Camp Type <span class="required-star">*</span></label>
+          <div class="camp-type-tabs">
+            <button type="button" class="camp-tab active" data-value="Regular Camp" onclick="selectCampType('Regular Camp', this)">
+              <span class="tab-icon">🏥</span>Regular Camp
+            </button>
+            <button type="button" class="camp-tab" data-value="D2D Camp" onclick="selectCampType('D2D Camp', this)">
+              <span class="tab-icon">🚪</span>D2D Camp
+            </button>
+            <button type="button" class="camp-tab" data-value="MMU Camp" onclick="selectCampType('MMU Camp', this)">
+              <span class="tab-icon">🚌</span>MMU Camp
+            </button>
+          </div>
+          <input type="hidden" id="campTypeHidden" name="campType" value="Regular Camp" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================
+         SECTION 3A – REGULAR CAMP (Coordinator Name)
+         ================================================================ -->
+    <div class="card" id="regularCampSection">
+      <div class="card-header">
+        <div class="step-badge">3</div>
+        <h2>Regular Camp Coordinator</h2>
+      </div>
+      <div class="card-body">
+        <div class="info-box">
+          ℹ️ For Regular Camp, please enter the Camp Coordinator name manually.
+        </div>
+        <div class="form-group">
+          <label for="coordinatorName">Coordinator Name <span class="required-star">*</span></label>
+          <input type="text" id="coordinatorName" name="coordinatorName"
+                 placeholder="Enter coordinator full name" autocomplete="off" />
+          <div class="field-error" id="coordinatorError">Please enter the coordinator name.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================
+         SECTION 3B – D2D / MMU CAMP (Dependent Dropdowns)
+         ================================================================ -->
+    <div class="card hidden" id="dependentSection">
+      <div class="card-header">
+        <div class="step-badge">3</div>
+        <h2>JAS / MAS &amp; Team Details</h2>
+      </div>
+      <div class="card-body">
+
+        <!-- JAS / MAS Name -->
+        <div class="form-group">
+          <label for="jasMasSelect">JAS / MAS Name <span class="required-star">*</span></label>
+          <select id="jasMasSelect" name="jasMasName" disabled>
+            <option value="">— Select District &amp; Camp Type first —</option>
+          </select>
+          <div class="field-error" id="jasMasError">Please select a JAS / MAS Name.</div>
+        </div>
+
+        <!-- Manual JAS / MAS (shown if "Not Available in List" selected) -->
+        <div class="form-group hidden" id="manualJasMasGroup">
+          <label for="manualJasMas">Manual JAS / MAS Name <span class="required-star">*</span></label>
+          <input type="text" id="manualJasMas" name="manualJasMasName"
+                 placeholder="Enter JAS / MAS name manually" autocomplete="off" />
+          <div class="field-error" id="manualJasMasError">Please enter the JAS / MAS name.</div>
+        </div>
+
+        <!-- Team No -->
+        <div class="form-group">
+          <label for="teamNoSelect">Team No <span class="required-star">*</span></label>
+          <select id="teamNoSelect" name="teamNo" disabled>
+            <option value="">— Select JAS / MAS Name first —</option>
+          </select>
+          <div class="field-error" id="teamNoError">Please select a Team No.</div>
+        </div>
+
+        <!-- Manual Team No (shown if "Not Available in List" selected for Team No) -->
+        <div class="form-group hidden" id="manualTeamNoGroup">
+          <label for="manualTeamNo">Manual Team No <span class="required-star">*</span></label>
+          <input type="text" id="manualTeamNo" name="manualTeamNo"
+                 placeholder="Enter Team No manually" autocomplete="off" />
+          <div class="field-error" id="manualTeamNoError">Please enter the Team No.</div>
+        </div>
+
+        <!-- Team Name (auto-filled) -->
+        <div class="form-group">
+          <label>Team Name</label>
+          <div class="team-name-display empty" id="teamNameDisplay">
+            Team members will appear here after selecting Team No.
+          </div>
+          <input type="hidden" id="teamNameHidden" name="teamName" />
+        </div>
+
+        <!-- Manual Team Name -->
+        <div class="form-group hidden" id="manualTeamNameGroup">
+          <label for="manualTeamName">Manual Team Name <span class="required-star">*</span></label>
+          <input type="text" id="manualTeamName" name="manualTeamName"
+                 placeholder="Enter team member names manually" autocomplete="off" />
+          <div class="field-error" id="manualTeamNameError">Please enter the Team Name.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================================================================
+         SECTION 4 – CONSUMABLE VERIFICATION TABLE
+         ================================================================ -->
+    <div class="card consumable-section">
+      <div class="card-header">
+        <div class="step-badge">4</div>
+        <h2>Consumable Verification</h2>
+      </div>
+      <div class="card-body" style="padding: 14px 12px;">
+        <div class="info-box">
+          📋 Opening Stock and Received Stock are mandatory for all 19 consumable items. Closing Stock is calculated automatically as Opening + Received.
+        </div>
+
+        <div class="form-group">
+          <label for="consumableDate">Consumable Date <span class="required-star">*</span></label>
+          <input type="date" id="consumableDate" name="consumableDate" />
+          <div class="field-error" id="consumableDateError">Please select the consumable date.</div>
+        </div>
+
+        <div class="toggle-row">
+          <label class="toggle-switch">
+            <input type="checkbox" id="trackReceivedClosing" checked />
+            <span class="toggle-slider"></span>
+          </label>
+          <div class="toggle-text">
+            <span class="toggle-title">Received &amp; Closing Stock</span>
+            <span class="toggle-hint" id="trackHint">Visible &amp; mandatory for all items</span>
+          </div>
+        </div>
+
+        <div class="field-error" id="consumableError">Please enter Opening Stock and Received Stock for all consumable items.</div>
+
+        <div class="consumable-table-wrapper">
+          <table class="consumable-table" id="consumableTable">
+            <thead>
+              <tr>
+                <th class="col-item">Consumable Item</th>
+                <th class="col-stock">Opening Stock <span class="required-star">*</span></th>
+                <th class="col-stock col-received">Received Stock <span class="required-star">*</span></th>
+                <th class="col-stock col-closing">Closing Stock <span class="auto-tag">(Auto)</span></th>
+              </tr>
+            </thead>
+            <tbody id="consumableTableBody">
+              <!-- Rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================
+         SECTION 5 – REMARKS
+         ================================================================ -->
+    <div class="card remarks-card">
+      <div class="card-header">
+        <div class="step-badge">5</div>
+        <h2>Remarks <span style="font-weight:400; font-size:0.83rem; color:#b45309;">(Optional)</span></h2>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="remarks">Additional Remarks</label>
+          <textarea id="remarks" name="remarks" placeholder="Any observations or additional information…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================
+         SUBMIT
+         ================================================================ -->
+    <div class="submit-section">
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <div class="spinner"></div>
+        <span class="btn-text">📤 Submit Verification Form</span>
+      </button>
+    </div>
+
+  </form><!-- /#mainForm -->
+
+  <div class="app-footer">
+    Maharashtra Health Services &nbsp;·&nbsp; Phlebotomist Field Operations<br/>
+    All submitted data is securely stored in Google Sheets.
+  </div>
+
+</div><!-- /#formWrapper -->
+
+<script src="script.js"></script>
+</body>
+</html>
